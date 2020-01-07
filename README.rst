@@ -1,15 +1,20 @@
 Hear ye, hear ye, says the ``towncrier``
 ========================================
 
-.. image:: https://travis-ci.org/hawkowl/towncrier.svg?branch=master
-    :target: https://travis-ci.org/hawkowl/towncrier
-
-.. image:: https://codecov.io/github/hawkowl/towncrier/coverage.svg?branch=master
-    :target: https://codecov.io/github/hawkowl/towncrier?branch=master
+.. image:: https://github.com/oasisprotocol/towncrier/workflows/ci-tests/badge.svg
+    :target: https://github.com/oasisprotocol/towncrier/actions?query=workflow:ci-tests+branch:oasis-master
 
 ``towncrier`` is a utility to produce useful, summarised news files for your project.
 Rather than reading the Git history as some newer tools to produce it, or having one single file which developers all write to, ``towncrier`` reads "news fragments" which contain information `useful to end users`.
 
+Notice
+------
+
+This is (hopefully) a **temporary fork** of the towncrier_ project that
+implements some additional features/fixes we need at `Oasis`_.
+
+.. _towncrier: https://github.com/twisted/towncrier/
+.. _Oasis: https://oasisprotocol.org/
 
 Philosophy
 ----------
@@ -27,7 +32,7 @@ Quick Start
 
 Install from PyPI::
 
-    python3 -m pip install towncrier
+    python3 -m pip install https://github.com/oasisprotocol/towncrier/archive/oasis-master.tar.gz
 
 .. note::
 
