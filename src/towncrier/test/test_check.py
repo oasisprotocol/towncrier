@@ -75,6 +75,26 @@ class TestChecker(TestCase):
                 "On trunk, or no diffs, so no newsfragment required.\n", result.output
             )
 
+    def test_only_newsfile_changed(self):
+        runner = CliRunner()
+
+        with runner.isolated_filesystem():
+            create_project("pyproject.toml")
+
+            file_path = "NEWS.rst"
+            with open(file_path, "w") as f:
+                f.write("Change Log for test project")
+
+            call(["git", "add", file_path])
+            call(["git", "commit", "-m", "Add NEWS.rst"])
+
+            result = runner.invoke(_main, ["--compare-with", "master"])
+
+            self.assertEqual(0, result.exit_code)
+            self.assertTrue(
+                result.output.endswith("Only the configured news file has changed.\n")
+            )
+
     def test_fragment_exists(self):
         runner = CliRunner()
 
