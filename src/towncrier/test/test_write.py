@@ -74,7 +74,6 @@ Bugfixes
 
 - Web fixed. (#3)
 
-
 Old text.
 """
 
@@ -182,7 +181,6 @@ Bugfixes
 ~~~~~~~~
 
 - Web fixed. (#3)
-
 
 Old text.
 """

@@ -40,5 +40,7 @@ def append_to_newsfile(
         f.write(top_line.encode("utf8"))
         f.write(content.encode("utf8"))
         if existing_content[0]:
-            f.write(b"\n\n")
+            # NOTE: The content that was written in the previous line already
+            # includes an empty line at the end.
+            f.write(b"\n")
         f.write(existing_content[0].lstrip().encode("utf8"))
