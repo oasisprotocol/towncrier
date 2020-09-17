@@ -10,9 +10,10 @@ from subprocess import call
 from towncrier.check import _main
 
 
-def create_project(pyproject_path):
+def create_project(pyproject_path, additional_config=''):
     with open(pyproject_path, "w") as f:
         f.write("[tool.towncrier]\n" 'package = "foo"\n')
+        f.write(additional_config)
     os.mkdir("foo")
     with open("foo/__init__.py", "w") as f:
         f.write('__version__ = "1.2.3"\n')
@@ -143,4 +144,27 @@ class TestChecker(TestCase):
             self.assertEqual(1, result.exit_code)
             self.assertTrue(
                 result.output.endswith("No new newsfragments found on this branch.\n")
+            )
+
+    def test_fragment_missing_but_file_in_ignore_files(self):
+        runner = CliRunner()
+
+        with runner.isolated_filesystem():
+            create_project(
+                "pyproject.toml",
+                additional_config='check_ignore_files = ["foo/somefile.py"]\n',
+            )
+
+            file_path = "foo/somefile.py"
+            with open(file_path, "w") as f:
+                f.write("import os")
+
+            call(["git", "add", "foo/somefile.py"])
+            call(["git", "commit", "-m", "add a file"])
+
+            result = runner.invoke(_main, ["--compare-with", "master"])
+
+            self.assertEqual(0, result.exit_code)
+            self.assertTrue(
+                result.output.endswith("On trunk, or no diffs, so no newsfragment required.\n")
             )

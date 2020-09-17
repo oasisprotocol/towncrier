@@ -146,6 +146,7 @@ def parse_toml(base_path, config):
         "directory": config.get("directory"),
         "project_version": config.get("project_version"),
         "project_name": config.get("project_name"),
+        "check_ignore_files": config.get("check_ignore_files", []),
         "sections": sections,
         "types": types,
         "template": template,

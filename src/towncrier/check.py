@@ -52,26 +52,34 @@ def __main(comparewith, directory, config):
         click.echo(e.output)
         raise
 
-    if not files_changed:
+    # Convert changed files to a list.
+    files_changed = files_changed.split(os.linesep) if files_changed else []
+
+    # Create a set of changed files converted to absolute paths.
+    files = set(os.path.join(base_directory, f) for f in files_changed)
+
+    # Filter out ignored files.
+    ignore_files = set(os.path.join(base_directory, f) for f in config["check_ignore_files"])
+    if ignore_files:
+        click.echo("Ignoring files:")
+        for n, f in enumerate(ignore_files, start=1):
+            click.echo("{}. {}".format(n, f))
+        click.echo()
+
+        files = set(f for f in files if f not in ignore_files)
+
+    if len(files) == 0:
         click.echo("On trunk, or no diffs, so no newsfragment required.")
         sys.exit(0)
 
-    if files_changed == config["filename"]:
+    click.echo("Looking at these files:")
+    for n, f in enumerate(files, start=1):
+        click.echo("{}. {}".format(n, f))
+    click.echo()
+
+    if len(files) == 1 and files.pop() == os.path.join(base_directory, config["filename"]):
         click.echo("Only the configured news file has changed.")
         sys.exit(0)
-
-    files = set(
-        map(
-            lambda x: os.path.join(base_directory, x),
-            files_changed.split(os.linesep),
-        )
-    )
-
-    click.echo("Looking at these files:")
-    click.echo("----")
-    for n, change in enumerate(files, start=1):
-        click.echo("{}. {}".format(n, change))
-    click.echo("----")
 
     fragments = set()
 
