@@ -264,6 +264,10 @@ class TestCli(TestCase):
             call(["git", "init"])
             call(["git", "config", "user.name", "user"])
             call(["git", "config", "user.email", "user@example.com"])
+            # This should prevent password prompts and delays due to having to
+            # touch a hardware PGP device if people have commit.gpgsign turned
+            # on globally.
+            call(["git", "config", "commit.gpgsign", "false"])
             call(["git", "add", "."])
             call(["git", "commit", "-m", "Initial Commit"])
 
